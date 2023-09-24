@@ -18,7 +18,7 @@ class EventFactory extends Factory
     {
         return [
             'name' => fake()->unique()->sentence(3),
-            'description' => fake()->test,
+            'description' => fake()->paragraph(10),
             'start_time' => fake()->dateTimeBetween('now', '+1 month'),
             'end_time' => fake()->dateTimeBetween('+1 month', '+2 months'),
         ];
