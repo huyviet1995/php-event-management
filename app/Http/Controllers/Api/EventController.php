@@ -14,7 +14,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return EventResource::collection(Event::all());
+        return EventResource::collection(Event::with('user')->get());
     }
 
     /**
@@ -32,7 +32,7 @@ class EventController extends Controller
             ]),
             'user_id' => 895
         ]);
-        return $event;
+        return new EventResource($event);
     }
 
     /**
@@ -40,6 +40,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        $event->load('user', 'attendees');
         return new EventResource($event);
     }
 
@@ -48,7 +49,7 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        return $event->update(
+        $event = $event->update(
             $request->validate([
                 'name' => 'sometimes|string|max:255',
                 'description' => 'sometimes|nullable',
@@ -56,6 +57,7 @@ class EventController extends Controller
                 'end_time' => 'sometimes|date|after:start_time'
             ]),
         );
+        return new EventResource($event);
     }
 
     /**
